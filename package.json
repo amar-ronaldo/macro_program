@@ -24,7 +24,7 @@
     "rebuild": "npm rebuild --runtime=electron --target=8.0.0 --disturl=https://atom.io/download/atom-shell --abi=76",
     "electron-rebuild": "./node_modules/.bin/electron-rebuild.cmd"
   },
-  "repository": "https://github.com/electron/electron-api-demos",
+  "repository": "https://github.com/amar-ronaldo/macro_program",
   "keywords": [
     "Electron",
     "API",
