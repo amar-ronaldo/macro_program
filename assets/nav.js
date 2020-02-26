@@ -26,7 +26,7 @@ function handleSectionTrigger (event) {
 }
 
 function activateDefaultSection () {
-  document.getElementById('button-windows').click()
+  document.getElementById('button-withdraw').click()
 }
 
 function showMainContent () {
@@ -60,9 +60,9 @@ function hideAllSectionsAndDeselectButtons () {
   })
 }
 
-function displayAbout () {
-  document.querySelector('#about-modal').classList.add('is-shown')
-}
+// function displayAbout () {
+//   document.querySelector('#about-modal').classList.add('is-shown')
+// }
 
 // Default to the view that was active the last time the app was open
 const sectionId = settings.get('activeSectionButtonId')
@@ -71,6 +71,8 @@ if (sectionId) {
   const section = document.getElementById(sectionId)
   if (section) section.click()
 } else {
+  showMainContent()
+
   activateDefaultSection()
-  displayAbout()
+  // displayAbout()
 }

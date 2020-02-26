@@ -1,7 +1,7 @@
 const {app, dialog, globalShortcut} = require('electron')
 
 app.on('ready', () => {
-  globalShortcut.register('CommandOrControl+Alt+K', () => {
+  globalShortcut.register('CommandOrControl+Alt+Z', () => {
     dialog.showMessageBox({
       type: 'info',
       message: 'Success!',

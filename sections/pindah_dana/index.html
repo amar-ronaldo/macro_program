@@ -1,0 +1,61 @@
+<template class="task-template">
+    <section id="pindah-dana-section" class="section js-section u-category-menu">
+        <style>
+            .form-group-inline {
+                width: 100%;
+                display: inline-flex;
+                margin-bottom: 10px;
+            }
+
+            .form-group-col {
+                width: 50%;
+                display: inline-block;
+            }
+
+            .form-group-col:first-child {
+                padding-right: 10px;
+            }
+        </style>
+        <header class="section-header">
+            <div class="section-wrapper">
+                <h1>
+                    <i class="fa fa-exchange-alt fa-lg section-icon"></i>
+                    Pindah Dana
+                </h1>
+            </div>
+        </header>
+        <div class="demo">
+            <div class="demo-wrapper">
+                <form id="pindah-dana-form">
+
+                    <div class="form-group">
+                        <label>Jumlah Dana</label>
+                        <input class="form-control" placeholder="Jumlah Dana" name="jumlah_dana" type="number">
+                    </div>
+                    <div class="form-group-inline">
+                        <div class="form-group-col">
+                            <label>Bank Pengirim </label>
+                            <select class="form-control option-bank" id="option-bank-pengirim" name="bank_pengirim">
+                            </select>
+                        </div>
+                        <div class="form-group-col">
+                            <label>Bank Penerima </label>
+                            <select class="form-control option-bank" id="option-bank-penerima" name="bank_penerima">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-form btn-default" id="btn-pindah-dana">Run Macro</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+        <script type="text/javascript">
+            require('./renderer-process/pindah_dana/pindah_dana')
+        </script>
+
+    </section>
+</template>

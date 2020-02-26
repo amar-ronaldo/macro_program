@@ -4,38 +4,48 @@ require('update-electron-app')({
 
 const path = require('path')
 const glob = require('glob')
-const {app, BrowserWindow} = require('electron')
+const {
+  app,
+  BrowserWindow,
+  ipcMain
+} = require('electron')
 
-const debug = /--debug/.test(process.argv[2])
 
-if (process.mas) app.setName('Electron APIs')
+var settings = require('electron-settings')
+
+const debug = 'true';
+
+if (process.mas) app.setName('Macro Program')
 
 let mainWindow = null
+let macroWindow = null
 
-function initialize () {
+function initialize() {
   makeSingleInstance()
 
   loadDemos()
 
-  function createWindow () {
+  function settings_default() {
+    settings.set('WITHDRAW', null)
+    settings.set('PINDAH_DANA', null)
+    settings.set('BANK_LIST', 'BCA,Mandiri,BNI,BRI,CIMB,Danamon')
+  }
+
+  function createMainWindow() {
+
     const windowOptions = {
       width: 1080,
       minWidth: 680,
       height: 840,
-      title: app.getName(),
+      title: app.name,
       webPreferences: {
         nodeIntegration: true
       }
     }
 
-    if (process.platform === 'linux') {
-      windowOptions.icon = path.join(__dirname, '/assets/app-icon/png/512.png')
-    }
-
     mainWindow = new BrowserWindow(windowOptions)
     mainWindow.loadURL(path.join('file://', __dirname, '/index.html'))
 
-    // Launch fullscreen with DevTools open, usage: npm run debug
     if (debug) {
       mainWindow.webContents.openDevTools()
       mainWindow.maximize()
@@ -45,10 +55,59 @@ function initialize () {
     mainWindow.on('closed', () => {
       mainWindow = null
     })
+    return mainWindow
+
   }
 
-  app.on('ready', () => {
+  function createMacroWindow(parent) {
+    const macroWindowOptions = {
+      // frame: false,
+      // alwaysOnTop: true,
+      // show: false,
+      parent:parent,
+      backgroundColor: '#f1f1f1',
+      title: 'Pilih Member',
+
+      webPreferences: {
+        nodeIntegration: true
+      }
+    }
+    macroWindow = new BrowserWindow(macroWindowOptions)
+    macroWindow.loadURL(path.join('file://', __dirname, '/sections/module/select_member.html'))
+
+    // Launch fullscreen with DevTools open, usage: npm run debug
+    if (debug) {
+      mainWindow.maximize()
+      macroWindow.webContents.openDevTools()
+      require('devtron').install()
+    }
+
+
+    return macroWindow
+  }
+
+  function createWindow() {
+    mainWindow = createMainWindow()
+    macroWindow = createMacroWindow(mainWindow)
+
+
+
+    macroWindow.hide()
+    ipcMain.on('macro-window-select-member', (event, data) => {
+      macroWindow.webContents.send('reload-data',data)
+      macroWindow.show()
+    })
+
+    ipcMain.on('macro-window-select-hide', (event, data) => {
+      mainWindow.webContents.send('macro-window-select-member-reply', data)
+      macroWindow.hide()
+    })
+  }
+
+  app.on('ready', async () => {
+
     createWindow()
+    settings_default()
   })
 
   app.on('window-all-closed', () => {
@@ -58,10 +117,15 @@ function initialize () {
   })
 
   app.on('activate', () => {
-    if (mainWindow === null) {
+    if (mainWindow === null || macroWindow === null) {
       createWindow()
     }
   })
+  ipcMain.on('focus-main', () => {
+    if (mainWindow.isMinimized()) mainWindow.restore()
+    mainWindow.focus()
+    mainWindow.show()
+  });
 }
 
 // Make this app a single instance app.
@@ -71,7 +135,7 @@ function initialize () {
 //
 // Returns true if the current version of the app should quit instead of
 // launching.
-function makeSingleInstance () {
+function makeSingleInstance() {
   if (process.mas) return
 
   app.requestSingleInstanceLock()
@@ -85,9 +149,11 @@ function makeSingleInstance () {
 }
 
 // Require each JS file in the main-process dir
-function loadDemos () {
+function loadDemos() {
   const files = glob.sync(path.join(__dirname, 'main-process/**/*.js'))
-  files.forEach((file) => { require(file) })
+  files.forEach((file) => {
+    require(file)
+  })
 }
 
 initialize()

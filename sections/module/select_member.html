@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="../../assets/photon/css/photon.min.css">
+  <link rel="stylesheet" href="../../assets/css/demo.css">
+  <style>
+    body {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .td-pilih{
+      text-align: center;
+      width: 10px;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="window">
+    <header class="toolbar toolbar-header">
+      <h1 class="title">Pilih Member</h1>
+
+    </header>
+    <p class="section">Kami menemukan lebih dari 1 member, silahkan <b>pilih satu member</b> dibawah ini: </p>
+    <div class="window-content">
+
+      <table class="table-striped">
+        <thead>
+          <tr>
+            <th> Pilih Member </th>
+            <th> Nama Member </th>
+            <th> Handphone</th>
+            <th> BCA </th>
+            <th> Nama Rek BCA </th>
+            <th> Mandiri</th>
+            <th> Nama Rek Mandiri </th>
+            <th> Other</th>
+            <th> Nama di Other Bank </th>
+            <th> YM</th>
+            <th> Email </th>
+            <th> Join Database </th>
+            <th> Operator>
+            <th> Notes </th>
+            <th> Pilih Member </th>
+          </tr>
+        </thead>
+
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script src="../../renderer-process/module/select_member.js"></script>
+</body>
+<temp id="row" hidden>
+  <table>
+    <tbody>
+      <tr>
+        <td class="td-pilih">
+          <div class="btn btn-primary button-pilih" data-id=""> Pilih</div>
+        </td>
+        <td id="NamaMember"></td>
+        <td id="HandPhone"></td>
+        <td id="BCAAccountNumber"></td>
+        <td id="BCAAccountName"></td>
+        <td id="MandiriAccountNumber"></td>
+        <td id="MandiriAccountName"></td>
+        <td id="OtherBankName"></td>
+        <td id="OtherAccountName"></td>
+        <td id="YahooMessenger"></td>
+        <td id="EmailAddress"></td>
+        <td id="CreateDate"></td>
+        <td id="CreateBy"></td>
+        <td id="Notes"></td>
+        <td class="td-pilih">
+          <div class="btn btn-primary button-pilih" data-id=""> Pilih</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</temp>
+
+</html>

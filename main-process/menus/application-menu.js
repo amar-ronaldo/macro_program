@@ -1,35 +1,12 @@
-const {BrowserWindow, Menu, app, shell, dialog} = require('electron')
+const {
+  BrowserWindow,
+  Menu,
+  app,
+  shell,
+  dialog
+} = require('electron')
 
 let template = [{
-  label: 'Edit',
-  submenu: [{
-    label: 'Undo',
-    accelerator: 'CmdOrCtrl+Z',
-    role: 'undo'
-  }, {
-    label: 'Redo',
-    accelerator: 'Shift+CmdOrCtrl+Z',
-    role: 'redo'
-  }, {
-    type: 'separator'
-  }, {
-    label: 'Cut',
-    accelerator: 'CmdOrCtrl+X',
-    role: 'cut'
-  }, {
-    label: 'Copy',
-    accelerator: 'CmdOrCtrl+C',
-    role: 'copy'
-  }, {
-    label: 'Paste',
-    accelerator: 'CmdOrCtrl+V',
-    role: 'paste'
-  }, {
-    label: 'Select All',
-    accelerator: 'CmdOrCtrl+A',
-    role: 'selectall'
-  }]
-}, {
   label: 'View',
   submenu: [{
     label: 'Reload',
@@ -40,7 +17,7 @@ let template = [{
         // open secondary windows
         if (focusedWindow.id === 1) {
           BrowserWindow.getAllWindows().forEach(win => {
-            if (win.id > 1) win.close()
+            // if (win.id > 1) win.hide()
           })
         }
         focusedWindow.reload()
@@ -60,35 +37,6 @@ let template = [{
         focusedWindow.setFullScreen(!focusedWindow.isFullScreen())
       }
     }
-  }, {
-    label: 'Toggle Developer Tools',
-    accelerator: (() => {
-      if (process.platform === 'darwin') {
-        return 'Alt+Command+I'
-      } else {
-        return 'Ctrl+Shift+I'
-      }
-    })(),
-    click: (item, focusedWindow) => {
-      if (focusedWindow) {
-        focusedWindow.toggleDevTools()
-      }
-    }
-  }, {
-    type: 'separator'
-  }, {
-    label: 'App Menu Demo',
-    click: function (item, focusedWindow) {
-      if (focusedWindow) {
-        const options = {
-          type: 'info',
-          title: 'Application Menu Demo',
-          buttons: ['Ok'],
-          message: 'This demo is for the Menu section, showing how to create a clickable menu item in the application menu.'
-        }
-        dialog.showMessageBox(focusedWindow, options, function () {})
-      }
-    }
   }]
 }, {
   label: 'Window',
@@ -101,29 +49,14 @@ let template = [{
     label: 'Close',
     accelerator: 'CmdOrCtrl+W',
     role: 'close'
-  }, {
-    type: 'separator'
-  }, {
-    label: 'Reopen Window',
-    accelerator: 'CmdOrCtrl+Shift+T',
-    enabled: false,
-    key: 'reopenMenuItem',
-    click: () => {
-      app.emit('activate')
-    }
   }]
 }, {
   label: 'Help',
   role: 'help',
-  submenu: [{
-    label: 'Learn More',
-    click: () => {
-      shell.openExternal('http://electron.atom.io')
-    }
-  }]
+  submenu: []
 }]
 
-function addUpdateMenuItems (items, position) {
+function addUpdateMenuItems(items, position) {
   if (process.mas) return
 
   const version = app.getVersion()
@@ -154,7 +87,7 @@ function addUpdateMenuItems (items, position) {
   items.splice.apply(items, [position, 0].concat(updateItems))
 }
 
-function findReopenMenuItem () {
+function findReopenMenuItem() {
   const menu = Menu.getApplicationMenu()
   if (!menu) return
 
@@ -172,7 +105,7 @@ function findReopenMenuItem () {
 }
 
 if (process.platform === 'darwin') {
-  const name = app.getName()
+  const name = app.name
   template.unshift({
     label: name,
     submenu: [{

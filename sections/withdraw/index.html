@@ -1,0 +1,82 @@
+<template class="task-template">
+    <section id="withdraw-section" class="section js-section u-category-menu">
+        <style>
+            .form-group-inline {
+                width: 100%;
+                display: inline-flex;
+                margin-bottom: 10px;
+            }
+
+            .form-group-col {
+                width: 50%;
+                display: inline-block;
+            }
+
+            .form-group-col:first-child {
+                padding-right: 10px;
+            }
+        </style>
+        <header class="section-header">
+            <div class="section-wrapper">
+                <h1>
+                    <i class="fa fa-money-check fa-lg section-icon"></i>
+                    Withdraw
+                </h1>
+            </div>
+        </header>
+        <div class="demo">
+            <div class="demo-wrapper">
+                <form id="withdraw-form">
+
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input class="form-control" placeholder="Username" name="username">
+                    </div>
+                    <div class="form-group">
+                        <label>Akun Bank</label>
+                        <input class="form-control" placeholder="Akun" name="akun_bank">
+                    </div>
+                    <div class="form-group-inline">
+                        <div class="form-group-col">
+                            <label>Deposit</label>
+                            <input type="number" class="form-control" placeholder="Deposit" name="deposit">
+                        </div>
+                        <div class="form-group-col">
+                            <label>Withdraw</label>
+                            <input type="number" class="form-control" placeholder="withdraw" name="withdraw">
+                        </div>
+                    </div>
+                    <div class="form-group-inline">
+
+                        <div class="form-group-col">
+                            <label>Bonus</label>
+                            <input type="number" class="form-control" placeholder="Bonus" name="bonus">
+                        </div>
+                        <div class="form-group-col">
+                            <label>Cancel</label>
+                            <input type="number" class="form-control" placeholder="Cancel" name="cancel">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Bank Pengirim (admin)</label>
+                        <select class="form-control" id="option-bank" name="bank_admin">
+                        </select>
+                    </div>
+
+
+
+                    <div class="form-actions">
+                        <button class="btn btn-form btn-default" id="btnWithdraw">Run Macro</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+        <script type="text/javascript">
+            require('./renderer-process/withdraw/withdraw')
+        </script>
+
+    </section>
+</template>
