@@ -24,6 +24,7 @@
   <link rel="import" href="sections/setting/index.html">
   <link rel="import" href="sections/changelog.html">
   <link rel="import" href="sections/author.html">
+  <link rel="import" href="sections/shortcut.html">
 
 
 </head>
@@ -55,7 +56,8 @@
     <footer class="nav-footer">
       <button type="button" id="button-loading" data-modal="loading" hidden>loading</button>
       <button id="button-loading-hide" class="modal-hide" hidden>hide Loading</button>
-      <button type="button" id="button-changelog" data-section="changelog" class="nav-footer-button">Change Log</button>
+      <button type="button" id="button-shortcut" data-section="shortcut" class="nav-footer-button">Shorcut</button>
+      <button type="button" id="button-changelog" data-section="changelog" class="nav-footer-button">Changelog</button>
       <button type="button" id="button-author" data-section="author" class="nav-footer-button">Author</button>
     </footer>
   </nav>
@@ -64,11 +66,9 @@
 
   <script>
     require('./assets/imports')
-    require('./assets/ex-links')
     require('./assets/nav')
     require('./assets/demo-btns')
-    require('./assets/code-blocks')
-    require('./assets/normalize-shortcuts')
+    require('./assets/helper')
   </script>
 </body>
 

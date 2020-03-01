@@ -3,19 +3,21 @@ var moment = require('moment');
 
 class Database {
     constructor() {
+        let settings = require('electron-settings')
+        this.db = settings.get('DB')
         this.connection = mysql.createPool({
             connectionLimit: 10,
-            host: 'localhost',
-            user: 'root',
-            password: '',
-            database: 'dpm'
+            host: this.db.server,
+            user: this.db.username,
+            password: this.db.password,
+            database: this.db.database
         });
     }
     search_member(name) {
         return new Promise((resolve, reject) => {
             this.connection.query("SELECT * from `tbl_member` where `NamaMember` like ? AND `isDeleted` = 0", ["%" + name + "%"], (err, rows) => {
                 if (err) return reject(err)
-                if (rows.length == 0) return reject('user not found')
+                if (rows.length == 0) return reject('Username tidak ditemukan')
 
                 var res = new Object();
                 res.next = true
@@ -49,18 +51,19 @@ class Database {
                     data.bonus,
                     data.cancel,
                     data.bank_name,
-                    'Macro'
+                    this.db.operator
                 ]
                 this.connection.query('INSERT INTO tbl_transaction (TransactionDate, CreateDate, SiteBaseID, Deposit, Withdraw, Bonus, CancelBonus, NoteDepoWD, CreateBy) VALUES(?,?,?,?,?,?,?,?,?)', insert, (err) => {
                     if (err) return reject(err)
 
+
                     this.connection.query("select * from `tbl_sitebase` where `MemberID`  = ?", [id_member], (err, rows) => {
                         if (err) return reject(err)
 
-                        let deposit = rows[0].Deposit + data.deposit
-                        let withdraw = rows[0].Withdraw + data.withdraw
-                        let bonus = rows[0].Bonus + data.bonus
-                        let cancel = rows[0].CancelBonus + data.cancel
+                        let deposit = parseInt(rows[0].Deposit) + parseInt(data.deposit)
+                        let withdraw = parseInt(rows[0].Withdraw) + parseInt(data.withdraw)
+                        let bonus = parseInt(rows[0].Bonus) + parseInt(data.bonus)
+                        let cancel = parseInt(rows[0].CancelBonus) + parseInt(data.cancel)
                         let balance = deposit + bonus - withdraw - cancel
 
                         let update = [
@@ -69,19 +72,27 @@ class Database {
                             withdraw,
                             bonus,
                             cancel,
-                            rows[0].SiteBaseID
+                            parseInt(rows[0].SiteBaseID)
                         ]
 
-                        this.connection.query("UPDATE `tbl_sitebase` SET `Balance` = ?,`Deposit` = ?, `Bonus`=?, `CancelBonus`= ? WHERE SiteBaseID = ?", update, (err) => {
+                        let sql = this.connection.query("UPDATE `tbl_sitebase` SET `Balance` = ?,`Deposit` = ?,`Withdraw` = ?, `Bonus`=?, `CancelBonus`= ? WHERE SiteBaseID = ?", update, (err, results) => {
                             if (err) return reject(err)
-                            resolve('success input db') ;
+                            resolve(true);
                         })
-
                     })
 
                 });
 
             })
+        });
+    }
+    test_connection(){
+        return new Promise((resolve, reject) => {
+            this.connection.getConnection(err => {
+                if (err)
+                    return reject(err);
+                resolve();
+            });
         });
     }
     close() {
@@ -94,4 +105,4 @@ class Database {
         });
     }
 }
-module.exports = Database
+exports.db = new Database

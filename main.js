@@ -1,22 +1,18 @@
-require('update-electron-app')({
-  logger: require('electron-log')
-})
-
 const path = require('path')
 const glob = require('glob')
 const {
   app,
   BrowserWindow,
-  ipcMain
+  ipcMain,
+  globalShortcut
 } = require('electron')
-
 
 var settings = require('electron-settings')
 
-const debug = 'true';
+const debug = true;
+
 
 if (process.mas) app.setName('Macro Program')
-
 let mainWindow = null
 let macroWindow = null
 
@@ -61,12 +57,12 @@ function initialize() {
 
   function createMacroWindow(parent) {
     const macroWindowOptions = {
-      // frame: false,
+      frame: false,
       // alwaysOnTop: true,
-      // show: false,
-      parent:parent,
+      show: false,
+      parent: parent,
       backgroundColor: '#f1f1f1',
-      title: 'Pilih Member',
+      // title: 'Pilih Member',
 
       webPreferences: {
         nodeIntegration: true
@@ -76,28 +72,61 @@ function initialize() {
     macroWindow.loadURL(path.join('file://', __dirname, '/sections/module/select_member.html'))
 
     // Launch fullscreen with DevTools open, usage: npm run debug
-    if (debug) {
-      mainWindow.maximize()
-      macroWindow.webContents.openDevTools()
-      require('devtron').install()
-    }
+    // if (debug) {
+    //   mainWindow.maximize()
+    //   macroWindow.webContents.openDevTools()
+    //   require('devtron').install()
+    // }
 
 
     return macroWindow
   }
+  function createSettingAksesDatabaseWindow(parent) {
+    const modalPath = path.join('file://', __dirname, '/sections/setting/akses_database.html')
+    let win = new BrowserWindow({
+      width: 250,
+      height: 450,
+      frame: false,
+      show: false,
+      parent: parent, webPreferences: {
+        nodeIntegration: true
+      }
+    })
 
+    win.on('close', () => { win = null })
+    win.loadURL(modalPath)
+    // if (debug) {
+    //   // win.maximize()
+    //   win.webContents.openDevTools()
+    //   require('devtron').install()
+    // }
+    win.on('show', () => {
+      win.webContents.executeJavaScript('ready()')
+    })
+    return win
+  }
   function createWindow() {
     mainWindow = createMainWindow()
     macroWindow = createMacroWindow(mainWindow)
+    settingAksesDatabaseWindow = createSettingAksesDatabaseWindow(mainWindow)
 
 
 
-    macroWindow.hide()
-    ipcMain.on('macro-window-select-member', (event, data) => {
-      macroWindow.webContents.send('reload-data',data)
-      macroWindow.show()
+    ipcMain.on('setting-akses-database-modal', (event, data) => {
+      settingAksesDatabaseWindow.show()
+    })
+    ipcMain.on('setting-akses-database-modal-reply', (event, data) => {
+      settingAksesDatabaseWindow.hide()
+      if (data != null) {
+        settings.set('DB', data)
+        mainWindow.webContents.send('success-update-akses-database')
+      }
     })
 
+    ipcMain.on('macro-window-select-member', (event, data) => {
+      macroWindow.webContents.send('reload-data', data)
+      macroWindow.show()
+    })
     ipcMain.on('macro-window-select-hide', (event, data) => {
       mainWindow.webContents.send('macro-window-select-member-reply', data)
       macroWindow.hide()
@@ -105,12 +134,38 @@ function initialize() {
   }
 
   app.on('ready', async () => {
+    // shorcut 
 
     createWindow()
     settings_default()
+
+    globalShortcut.register('CommandOrControl+Shift+O', () => {
+      mainWindow.focus()
+      mainWindow.show()
+    })
+    globalShortcut.register('CommandOrControl+Shift+E', () => {
+      mainWindow.webContents.send('open-file-excel')
+    })
+
+    globalShortcut.registerAll(['CommandOrControl+1', 'CommandOrControl+num1'], () => {
+      mainWindow.focus()
+      mainWindow.show()
+      mainWindow.webContents.send('focus-withdaw')
+    })
+    globalShortcut.registerAll(['CommandOrControl+2', 'CommandOrControl+num2'], () => {
+      mainWindow.focus()
+      mainWindow.show()
+      mainWindow.webContents.send('focus-pindah-dana')
+    })
+    globalShortcut.registerAll(['CommandOrControl+3', 'CommandOrControl+num3'], () => {
+      mainWindow.focus()
+      mainWindow.show()
+      mainWindow.webContents.send('focus-setting')
+    })
   })
 
   app.on('window-all-closed', () => {
+    globalShortcut.unregisterAll()
     if (process.platform !== 'darwin') {
       app.quit()
     }
