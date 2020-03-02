@@ -9,7 +9,7 @@ const {
 
 var settings = require('electron-settings')
 
-const debug = true;
+const debug = false;
 
 
 if (process.mas) app.setName('Macro Program')
@@ -42,11 +42,11 @@ function initialize() {
     mainWindow = new BrowserWindow(windowOptions)
     mainWindow.loadURL(path.join('file://', __dirname, '/index.html'))
 
-    if (debug) {
-      mainWindow.webContents.openDevTools()
-      mainWindow.maximize()
-      require('devtron').install()
-    }
+    // if (debug) {
+    //   mainWindow.webContents.openDevTools()
+    //   mainWindow.maximize()
+    //   require('devtron').install()
+    // }
 
     mainWindow.on('closed', () => {
       mainWindow = null
