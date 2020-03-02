@@ -88,8 +88,8 @@ function zipAsset (asset) {
 
 async function getOrCreateRelease () {
   const { data: releases } = await github.repos.listReleases({
-    owner: 'electron',
-    repo: 'electron-api-demos',
+    owner: 'amar-ronaldo',
+    repo: 'macro_program',
     per_page: 100,
     page: 1
   })
@@ -101,8 +101,8 @@ async function getOrCreateRelease () {
 
   console.log('Creating new draft release')
   const { data: release } = await github.repos.createRelease({
-    owner: 'electron',
-    repo: 'electron-api-demos',
+    owner: 'amar-ronaldo',
+    repo: 'macro_program',
     tag_name: `v${version}`,
     target_commitish: 'master',
     name: version,
@@ -157,8 +157,8 @@ function uploadAsset (release, asset) {
 function publishRelease (release) {
   console.log('Publishing release')
   return github.repos.updateRelease({
-    owner: 'electron',
-    repo: 'electron-api-demos',
+    owner: 'amar-ronaldo',
+    repo: 'macro_program',
     release_id: release.id,
     draft: false
   })

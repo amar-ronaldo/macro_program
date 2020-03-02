@@ -8,19 +8,8 @@
   "scripts": {
     "start": "electron .",
     "dev": "electron . --debug",
-    "test": "mocha && standard",
-    "package": "npm-run-all package:*",
-    "package:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --out=out --icon=assets/app-icon/mac/app.icns --osx-sign.identity='Developer ID Application: GitHub' --extend-info=assets/mac/info.plist",
-    "package:win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --out=out --icon=assets/app-icon/win/app.ico",
-    "package:linux": "electron-packager . --overwrite --platform=linux --arch=x64 --out=out",
-    "package:sign-exe": "signcode './out/Electron API Demos-win32-ia32/Electron API Demos.exe' --cert ~/electron-api-demos.p12 --prompt --name 'Electron API Demos' --url 'http://electron.atom.io'",
-    "package:installer": "node ./script/installer.js",
-    "package:sign-installer": "signcode './out/windows-installer/ElectronAPIDemosSetup.exe' --cert ~/electron-api-demos.p12 --prompt --name 'Electron API Demos' --url 'http://electron.atom.io'",
-    "xpackage:mas": "./script/mas.sh",
-    "windows-store": "node ./script/windows-store.js",
-    "release": "node ./script/release.js",
-    "prepack": "check-for-leaks",
-    "prepush": "check-for-leaks",
+    "build": "electron-packager . app --platform win32 --arch x64 --out dist/",
+    "setup": "electron-installer-windows --src dist/app-win32-x64/ --dest dist/installers/",
     "rebuild": "npm rebuild --runtime=electron --target=8.0.0 --disturl=https://atom.io/download/atom-shell --abi=76",
     "electron-rebuild": "./node_modules/.bin/electron-rebuild.cmd"
   },
@@ -45,7 +34,9 @@
     "request": "^2.88.2",
     "rimraf": "^3.0.2",
     "signcode": "^0.5.0",
-    "standard": "^8.2.0"
+    "standard": "^8.2.0",
+    "electron-installer-windows": "*",
+    "electron-prebuilt": "*"
   },
   "dependencies": {
     "active-window": "^0.1.0",

@@ -49,7 +49,7 @@ function dev() {
 }
 
 function init() {
-    dev()
+    // dev()
     append_bank()
 }
 
