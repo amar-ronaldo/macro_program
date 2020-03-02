@@ -36,6 +36,7 @@ function run_macro() {
         }).finally(() => {
             ipcRenderer.send('focus-main')
             $('#button-loading-hide').trigger('click')
+            document.getElementById('pindah-dana-form').reset();
         })
 }
 

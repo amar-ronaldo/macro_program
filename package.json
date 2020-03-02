@@ -1,5 +1,5 @@
 {
-  "name": "macro-program",
+  "name": "MacroProgram",
   "productName": "Macro Program",
   "version": "1.0.0",
   "description": "Macro Program untuk buka excel dan input adp",
@@ -8,8 +8,13 @@
   "scripts": {
     "start": "electron .",
     "dev": "electron . --debug",
-    "build": "electron-packager . app --platform win32 --arch x64 --out dist/",
-    "setup": "electron-installer-windows --src dist/app-win32-x64/ --dest dist/installers/",
+    "test": "mocha && standard",
+    "package": "npm-run-all package:*",
+    "package:win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --out=out --icon=assets/app-icon/win/app.ico",
+    "package:installer": "node ./script/installer.js",
+    "release": "node ./script/release.js",
+    "prepack": "check-for-leaks",
+    "prepush": "check-for-leaks",
     "rebuild": "npm rebuild --runtime=electron --target=8.0.0 --disturl=https://atom.io/download/atom-shell --abi=76",
     "electron-rebuild": "./node_modules/.bin/electron-rebuild.cmd"
   },
@@ -34,25 +39,21 @@
     "request": "^2.88.2",
     "rimraf": "^3.0.2",
     "signcode": "^0.5.0",
-    "standard": "^8.2.0",
-    "electron-installer-windows": "*",
-    "electron-prebuilt": "*"
+    "standard": "^8.2.0"
   },
   "dependencies": {
-    "active-window": "^0.1.0",
     "dotenv": "^8.2.0",
     "electron-log": "^2.2.14",
     "electron-settings": "^3.0.7",
     "electron-shortcut-normalizer": "^1.0.0",
+    "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^5.1.0",
-    "glob": "^7.1.6",
-    "highlight.js": "^9.18.1",
+    "glob": "^7.1.0",
+    "highlight.js": "^9.3.0",
     "jquery": "^3.4.1",
     "moment": "^2.24.0",
     "mysql": "^2.18.1",
-    "node-process-windows": "^0.0.2",
-    "robotjs": "^0.6.0",
-    "update-electron-app": "^1.5.0",
+    "update-electron-app": "^1.1.1",
     "xlsx-populate": "^1.20.1"
   },
   "standard": {

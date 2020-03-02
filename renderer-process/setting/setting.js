@@ -1,8 +1,8 @@
-const { dialog} = require('electron').remote
+const { dialog } = require('electron').remote
 const remote = require('electron').remote
 const ipcRenderer = require('electron').ipcRenderer
 const $ = require('jquery');
-const {callNotification} = require('../module/notification/notification.js')
+const { callNotification } = require('../module/notification/notification.js')
 var settings = require('electron-settings')
 
 const excelHelper = require('../excel.js');
@@ -17,7 +17,7 @@ $('#select-file-excel').on('click', function () {
 
   dialog.showOpenDialog({ properties: ['openFile'] })
     .then(async result => {
-      if (!result.canceled){
+      if (!result.canceled) {
         await save_path($id, result.filePaths[0])
         callNotification.success('Path Berhasil di Simpan')
       }
@@ -36,8 +36,9 @@ async function save_path(type, path) {
 
 $('#refresh-bank-excel').on('click', async function () {
   $('#button-loading').trigger('click')
-  await excelHelper.read_bank_name_form_excel()
-  callNotification.success('List Bank Berhasil di Refresh')
+  await excelHelper.read_bank_name_form_excel().then(()=>{
+    callNotification.success('List Bank Berhasil di Refresh')
+  }).catch(err => { callNotification.error(err) })
   remote.getCurrentWindow().reload()
   // $('#button-loading-hide').trigger('click')
 })
@@ -47,16 +48,12 @@ $('#input-akses-adp').on('click', async function () {
   ipcRenderer.send('setting-akses-database-modal')
 })
 
-$('#check-akses-adp').on('click',async()=>{
-  let {db} = require('../db.js')
-  db.test_connection().then(()=>{
+$('#check-akses-adp').on('click', async () => {
+  let { db } = require('../db.js')
+  db.test_connection().then(() => {
     callNotification.success('Database Berhasil Terhubung')
-  }).catch((e)=>{
-    callNotification.error(e)
-    console.log(e);
-    
-  })
-  
+  }).catch((e) => {callNotification.error(e)})
+
 })
 
 
@@ -67,8 +64,8 @@ function init() {
   });
 }
 
-ipcRenderer.on('success-update-akses-database',()=>{
+ipcRenderer.on('success-update-akses-database', () => {
   remote.getCurrentWindow().reload()
-   callNotification.success('Berhasil Update Akses Database')
+  callNotification.success('Berhasil Update Akses Database')
 })
 init()

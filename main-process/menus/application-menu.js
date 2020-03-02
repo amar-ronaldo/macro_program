@@ -63,25 +63,25 @@ function addUpdateMenuItems(items, position) {
   let updateItems = [{
     label: `Version ${version}`,
     enabled: false
-  }, {
-    label: 'Checking for Update',
-    enabled: false,
-    key: 'checkingForUpdate'
-  }, {
-    label: 'Check for Update',
-    visible: false,
-    key: 'checkForUpdate',
-    click: () => {
-      require('electron').autoUpdater.checkForUpdates()
-    }
-  }, {
-    label: 'Restart and Install Update',
-    enabled: true,
-    visible: false,
-    key: 'restartToUpdate',
-    click: () => {
-      require('electron').autoUpdater.quitAndInstall()
-    }
+  // }, {
+  //   label: 'Checking for Update',
+  //   enabled: false,
+  //   key: 'checkingForUpdate'
+  // }, {
+  //   label: 'Check for Update',
+  //   visible: false,
+  //   key: 'checkForUpdate',
+  //   click: () => {
+  //     require('electron').autoUpdater.checkForUpdates()
+  //   }
+  // }, {
+  //   label: 'Restart and Install Update',
+  //   enabled: true,
+  //   visible: false,
+  //   key: 'restartToUpdate',
+  //   click: () => {
+  //     require('electron').autoUpdater.quitAndInstall()
+  //   }
   }]
 
   items.splice.apply(items, [position, 0].concat(updateItems))

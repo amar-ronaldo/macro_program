@@ -8,7 +8,7 @@ let excelHelper = require('../excel.js');
 let { db } = require('../db.js')
 let $ = require('jquery');
 
-$('#btnWithdraw').on('click', function () {
+$('#btnWithdraw').on('click', async function (e) {
     $('#button-loading').trigger('click')
 
     setTimeout(async () => {
@@ -22,22 +22,28 @@ $('#btnWithdraw').on('click', function () {
 
         settings.set('WITHDRAW', $data)
         await excelHelper.get_last_mutasi()
-
+        
         Promise.all([excelHelper.check_open()])
             .then(async () => {
+                
                 await run_macro()
                     .then(async () => {
                         await excelHelper.macro_input()
                             .then(() => {
+                                reset_form()
                                 callNotification.success('Berhasil Update Data')
                             })
-                            .catch((e) => { callNotification.error(e) })
+                            .catch((e) => { 
+                                reset_form()
+                                callNotification.error(e) })
                     })
-                    .catch((e) => { callNotification.error(e) })
+                    .catch((e) => { 
+                        reset_form() 
+                        callNotification.error(e) })
             })
-            .catch(e => { callNotification.error(e) })
-            .finally(() => {
-                $('#button-loading-hide').trigger('click')
+            .catch(e => { 
+                reset_form()
+                callNotification.error(e) 
             })
     }, 250)
 
@@ -80,9 +86,17 @@ function dev() {
     $('input[name=bonus]').val('300')
     $('input[name=cancel]').val('400')
 }
+function reset_form(){
+    document.getElementById('withdraw-form').reset();
+    $('input[name=deposit]').val('0')
+    $('input[name=withdraw]').val('0')
+    $('input[name=bonus]').val('0')
+    $('input[name=cancel]').val('0')
+    $('#button-loading-hide').trigger('click')        
+}
 
 function init() {
-    // dev()
+    reset_form()
     append_bank()
 }
 

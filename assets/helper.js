@@ -27,4 +27,4 @@ async function init() {
     $('#button-loading-hide').trigger('click')
 }
 
-// init()
+init()

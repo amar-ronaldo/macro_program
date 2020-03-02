@@ -11,6 +11,13 @@ var settings = require('electron-settings')
 
 const debug = false;
 
+if (require('electron-squirrel-startup')) app.quit()
+// if first time install on windows, do not run application, rather
+// let squirrel installer do its work
+const setupEvents = require('./script/setup-event')
+if (setupEvents.handleSquirrelEvent()) {
+  process.exit()
+}
 
 if (process.mas) app.setName('Macro Program')
 let mainWindow = null
@@ -44,7 +51,7 @@ function initialize() {
 
     // if (debug) {
     //   mainWindow.webContents.openDevTools()
-    //   mainWindow.maximize()
+      // mainWindow.maximize()
     //   require('devtron').install()
     // }
 
