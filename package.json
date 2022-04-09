@@ -51,7 +51,7 @@
     "glob": "^7.1.0",
     "highlight.js": "^9.3.0",
     "jquery": "^3.4.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "mysql": "^2.18.1",
     "update-electron-app": "^1.1.1",
     "xlsx-populate": "^1.20.1"
